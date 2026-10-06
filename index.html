@@ -23,7 +23,7 @@
             </div>
         </div>
         <h1 class="text-2xl font-bold tracking-widest text-white">VI CAPITAL</h1>
-        <p class="text-xs uppercase tracking-[0.25em] text-cyan-400 mt-1">Institutional Terminal</p>
+        <p class="text-xs uppercase tracking-[0.25em] text-cyan-400 mt-1">Multi-Account Terminal</p>
     </div>
 
     <!-- HEADER -->
@@ -34,7 +34,7 @@
             </div>
             <div>
                 <h2 class="text-sm font-bold tracking-wide text-white leading-none">VI CAPITAL</h2>
-                <span class="text-[10px] text-cyan-400 uppercase tracking-widest">Multi-Device Sync</span>
+                <span class="text-[10px] text-cyan-400 uppercase tracking-widest">Fund Management</span>
             </div>
         </div>
         <button onclick="openSettings()" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-slate-300 text-xs border border-slate-700 transition-all">
@@ -52,7 +52,7 @@
                     <h3 class="text-lg font-bold text-white">Research Pipeline</h3>
                     <p class="text-xs text-slate-400">AI-driven analysis cards</p>
                 </div>
-                <button onclick="addNewIdea()" class="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-xs font-semibold rounded-lg shadow-lg shadow-cyan-950 text-white transition-all">
+                <button onclick="addNewIdea()" class="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-xs font-semibold rounded-lg shadow-lg text-white">
                     + New Ticker
                 </button>
             </div>
@@ -63,61 +63,44 @@
             </div>
         </section>
 
-        <!-- TAB 2: POSITIONS -->
-        <section id="tab-positions" class="tab-content space-y-4 hidden">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h3 class="text-lg font-bold text-white">Active Positions</h3>
-                    <p class="text-xs text-slate-400">Live exposure & risk boundaries</p>
-                </div>
-                <button onclick="addNewPosition()" class="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-xs font-semibold rounded-lg text-white">
-                    + Add Position
-                </button>
-            </div>
-            <div id="positions-container" class="space-y-3">
-                <div class="bg-[#111C44] border border-slate-800 rounded-2xl p-6 text-center text-slate-400 text-xs">
-                    Loading positions...
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 3: PORTFOLIOS -->
+        <!-- TAB 2: POSITIONS & SUBACCOUNTS (DUAL MODE) -->
         <section id="tab-portfolios" class="tab-content space-y-4 hidden">
             <div class="flex items-center justify-between">
                 <div>
-                    <h3 class="text-lg font-bold text-white">Client Portfolios</h3>
-                    <p class="text-xs text-slate-400">Allocation & equity metrics</p>
+                    <h3 class="text-lg font-bold text-white">VI Capital Fund</h3>
+                    <p class="text-xs text-slate-400">Multi-account hierarchy</p>
                 </div>
                 <button onclick="alert('Snapshot capture ready')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-xs font-semibold rounded-lg text-white">
                     Share Snapshot
                 </button>
             </div>
-            <div class="bg-[#111C44] border border-slate-800 rounded-2xl p-4 space-y-3">
-                <div class="flex justify-between items-center text-xs text-slate-400">
-                    <span>Total Balance</span>
-                    <span id="lbl-total-balance" class="text-emerald-400 font-bold text-sm">$0.00</span>
-                </div>
-                <div class="flex justify-between items-center text-xs text-slate-400">
-                    <span>Current Result</span>
-                    <span id="lbl-current-result" class="text-rose-400 font-bold text-xs">0.00%</span>
-                </div>
+
+            <!-- Mode Switcher Toggle -->
+            <div class="grid grid-cols-2 gap-2 bg-[#0B132B] p-1 rounded-xl border border-slate-800">
+                <button onclick="switchViewMode('subaccounts')" id="mode-btn-sub" class="py-2 text-xs font-bold rounded-lg bg-cyan-600 text-white transition-all">Subaccounts Mode</button>
+                <button onclick="switchViewMode('positions')" id="mode-btn-pos" class="py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition-all">Positions Mode</button>
+            </div>
+
+            <!-- CONTAINER FOR HIERARCHICAL VIEW -->
+            <div id="hierarchy-container" class="space-y-3">
+                <!-- Dynamically populated via JS depending on mode -->
             </div>
         </section>
 
-        <!-- TAB 4: TRADES -->
+        <!-- TAB 3: TRADES -->
         <section id="tab-trades" class="tab-content space-y-4 hidden">
             <div class="flex items-center justify-between">
                 <div>
-                    <h3 class="text-lg font-bold text-white">Trade History & Stats</h3>
-                    <p class="text-xs text-slate-400">CSP, PMCC, and Covered Calls</p>
+                    <h3 class="text-lg font-bold text-white">Trade History</h3>
+                    <p class="text-xs text-slate-400">Auto-splits across subaccounts</p>
                 </div>
                 <button onclick="addNewTrade()" class="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-xs font-semibold rounded-lg text-white">
-                    + Log Trade
+                    + Log & Split Trade
                 </button>
             </div>
             <div id="trades-container" class="space-y-3">
                 <div class="bg-[#111C44] border border-slate-800 rounded-2xl p-6 text-center text-slate-400 text-xs">
-                    Loading trade history...
+                    No trades logged yet.
                 </div>
             </div>
         </section>
@@ -129,9 +112,6 @@
         <button onclick="switchTab('ideas')" class="nav-btn flex flex-col items-center justify-center w-16 py-1 text-cyan-400" data-target="ideas">
             <span class="text-[10px] font-medium">Ideas</span>
         </button>
-        <button onclick="switchTab('positions')" class="nav-btn flex flex-col items-center justify-center w-16 py-1 text-slate-400" data-target="positions">
-            <span class="text-[10px] font-medium">Positions</span>
-        </button>
         <button onclick="switchTab('portfolios')" class="nav-btn flex flex-col items-center justify-center w-16 py-1 text-slate-400" data-target="portfolios">
             <span class="text-[10px] font-medium">Portfolios</span>
         </button>
@@ -140,9 +120,8 @@
         </button>
     </nav>
 
-    <!-- JAVASCRIPT LOGIC & CLOUD SYNC -->
+    <!-- JAVASCRIPT LOGIC -->
     <script>
-        // Pre-configured JSONBin credentials
         const DEFAULT_BIN_ID = "6ac4cfedac6210605a189462";
         const DEFAULT_API_KEY = "$2a$10$v9B4doMVIlIpOTqW/ERVf.n5A4s317OiHntI5nvFWD.rE6f2ErcBy";
 
@@ -168,31 +147,44 @@
             });
         }
 
+        // App Data Structure supporting dual-mode inspection
         let appData = {
             ideas: [],
-            positions: [],
-            portfolio: { totalBalance: 92626.51, currentResult: -1.31, positions: [] },
+            subaccounts: {
+                mine: { name: "Mine (Vadim)", weight: 0.50, balance: 50000, pnl: 0 },
+                liza: { name: "Liza", weight: 0.30, balance: 30000, pnl: 0 },
+                chris: { name: "Chris", weight: 0.20, balance: 20000, pnl: 0 }
+            },
+            positions: [], // Master list of positions with split breakdowns
             trades: []
         };
 
-        function getConfig() {
-            return {
-                binId: localStorage.getItem('vi_bin_id') || DEFAULT_BIN_ID,
-                apiKey: localStorage.getItem('vi_api_key') || DEFAULT_API_KEY
-            };
+        let viewMode = 'subaccounts'; // 'subaccounts' or 'positions'
+        let expandedKey = null; // Currently expanded accordion key
+
+        function switchViewMode(mode) {
+            viewMode = mode;
+            expandedKey = null;
+            if(mode === 'subaccounts') {
+                document.getElementById('mode-btn-sub').className = "py-2 text-xs font-bold rounded-lg bg-cyan-600 text-white transition-all";
+                document.getElementById('mode-btn-pos').className = "py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition-all";
+            } else {
+                document.getElementById('mode-btn-pos').className = "py-2 text-xs font-bold rounded-lg bg-cyan-600 text-white transition-all";
+                document.getElementById('mode-btn-sub').className = "py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition-all";
+            }
+            renderApp();
         }
 
-        function openSettings() {
-            const config = getConfig();
-            const binId = prompt("JSONBin ID:", config.binId);
-            if (binId === null) return;
-            const apiKey = prompt("JSONBin Master API Key:", config.apiKey);
-            if (apiKey === null) return;
+        function toggleExpand(key) {
+            expandedKey = (expandedKey === key) ? null : key;
+            renderApp();
+        }
 
-            localStorage.setItem('vi_bin_id', binId.trim());
-            localStorage.setItem('vi_api_key', apiKey.trim());
-            alert("Configuration updated!");
-            loadAppData();
+        function getConfig() {
+            return {
+                binId: localStorage.getItem('vi_bin_id'] || DEFAULT_BIN_ID,
+                apiKey: localStorage.getItem('vi_api_key') || DEFAULT_API_KEY
+            };
         }
 
         async function loadAppData() {
@@ -203,55 +195,118 @@
                 });
                 const result = await response.json();
                 if (result.record) {
-                    appData = result.record;
+                    if(result.record.subaccounts) appData = result.record;
                     renderApp();
                 }
-            } catch (err) {
-                console.error("Failed to load from cloud:", err);
-            }
+            } catch (err) { console.error("Cloud load error:", err); }
         }
 
         async function saveAppData() {
             const config = getConfig();
             try {
-                const response = await fetch(`https://api.jsonbin.io/v3/b/${config.binId}`, {
+                await fetch(`https://api.jsonbin.io/v3/b/${config.binId}`, {
                     method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': config.apiKey
-                    },
+                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': config.apiKey },
                     body: JSON.stringify(appData)
                 });
-                if (!response.ok) {
-                    const errorRes = await response.json();
-                    alert("Save error: " + (errorRes.message || "Unknown error"));
-                }
-            } catch (err) {
-                console.error("Network save error:", err);
-            }
+            } catch (err) { console.error("Cloud save error:", err); }
         }
 
         function renderApp() {
-            // Render Portfolio
-            if(appData.portfolio) {
-                document.getElementById('lbl-total-balance').innerText = '$' + Number(appData.portfolio.totalBalance || 0).toLocaleString();
-                document.getElementById('lbl-current-result').innerText = (appData.portfolio.currentResult || 0) + '%';
-            }
-
             // Render Ideas
             const ideasContainer = document.getElementById('ideas-container');
             if(appData.ideas && appData.ideas.length > 0) {
                 ideasContainer.innerHTML = appData.ideas.map(item => `
                     <div class="bg-[#111C44] border border-slate-800 rounded-xl p-4 flex justify-between items-center">
                         <div>
-                            <span class="text-[10px] text-cyan-400 font-semibold uppercase">${item.date || 'Today'}</span>
+                            <span class="text-[10px] text-cyan-400 font-semibold uppercase">${item.date}</span>
                             <h4 class="text-base font-bold text-white">${item.ticker}</h4>
                         </div>
-                        <span class="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded">Score: ${item.score || 'N/A'}</span>
+                        <span class="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded">Score: ${item.score}</span>
                     </div>
                 `).join('');
             } else {
                 ideasContainer.innerHTML = `<div class="bg-[#111C44] border border-slate-800 rounded-2xl p-6 text-center text-slate-400 text-xs">No research ideas logged yet.</div>`;
+            }
+
+            // Render Hierarchy (Dual Mode)
+            const hierarchyContainer = document.getElementById('hierarchy-container');
+            if(viewMode === 'subaccounts') {
+                // SUBACCOUNTS DOMINANT MODE
+                hierarchyContainer.innerHTML = Object.keys(appData.subaccounts).map(subKey => {
+                    const sub = appData.subaccounts[subKey];
+                    const isExpanded = (expandedKey === subKey);
+                    // Filter positions belonging to this subaccount
+                    const subPositions = appData.positions.filter(p => p.splits[subKey] > 0);
+
+                    return `
+                        <div class="bg-[#111C44] border border-slate-800 rounded-xl p-4 transition-all">
+                            <div onclick="toggleExpand('${subKey}')" class="flex justify-between items-center cursor-pointer">
+                                <div>
+                                    <span class="text-[10px] text-cyan-400 font-semibold uppercase">Weight: ${(sub.weight * 100)}%</span>
+                                    <h4 class="text-base font-bold text-white">${sub.name}</h4>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-sm font-bold text-emerald-400 block">$${Number(sub.balance).toLocaleString()}</span>
+                                    <span class="text-[10px] text-slate-400">${isExpanded ? '▲ Tap to close' : '▼ View Positions'}</span>
+                                </div>
+                            </div>
+                            ${isExpanded ? `
+                                <div class="mt-4 pt-3 border-t border-slate-800 space-y-2">
+                                    <p class="text-[10px] text-cyan-400 font-semibold uppercase tracking-wider">Assigned Positions:</p>
+                                    ${subPositions.length > 0 ? subPositions.map(p => `
+                                        <div class="flex justify-between items-center bg-[#0B132B] p-2.5 rounded-lg border border-slate-800/60 text-xs">
+                                            <span class="font-bold text-white">${p.ticker} (${p.strategy})</span>
+                                            <span class="text-emerald-400">Allocation: ${p.splits[subKey]}</span>
+                                        </div>
+                                    `).join('') : '<p class="text-xs text-slate-400 italic">No open positions in this account.</p>'}
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                // POSITIONS DOMINANT MODE
+                if(!appData.positions || appData.positions.length === 0) {
+                    hierarchyContainer.innerHTML = `<div class="bg-[#111C44] border border-slate-800 rounded-2xl p-6 text-center text-slate-400 text-xs">No active positions logged. Log a trade to populate.</div>`;
+                } else {
+                    hierarchyContainer.innerHTML = appData.positions.map((p, idx) => {
+                        const isExpanded = (expandedKey === 'pos_' + idx);
+                        return `
+                            <div class="bg-[#111C44] border border-slate-800 rounded-xl p-4 transition-all">
+                                <div onclick="toggleExpand('pos_${idx}')" class="flex justify-between items-center cursor-pointer">
+                                    <div>
+                                        <span class="text-[10px] text-cyan-400 font-semibold uppercase">${p.strategy}</span>
+                                        <h4 class="text-base font-bold text-white">${p.ticker}</h4>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="text-sm font-bold text-white block">Total Size: ${p.size}</span>
+                                        <span class="text-[10px] text-cyan-400">${isExpanded ? '▲ Hide Subaccounts' : '▼ View Subaccount Proportions'}</span>
+                                    </div>
+                                </div>
+                                ${isExpanded ? `
+                                    <div class="mt-4 pt-3 border-t border-slate-800 space-y-2">
+                                        <p class="text-[10px] text-cyan-400 font-semibold uppercase tracking-wider">Subaccount Breakdown & Proportions:</p>
+                                        <div class="grid grid-cols-3 gap-2 text-center">
+                                            <div class="bg-[#0B132B] p-2 rounded-lg border border-slate-800/60">
+                                                <span class="text-[10px] text-slate-400 block">Mine (50%)</span>
+                                                <span class="text-xs font-bold text-emerald-400">${p.splits.mine}</span>
+                                            </div>
+                                            <div class="bg-[#0B132B] p-2 rounded-lg border border-slate-800/60">
+                                                <span class="text-[10px] text-slate-400 block">Liza (30%)</span>
+                                                <span class="text-xs font-bold text-emerald-400">${p.splits.liza}</span>
+                                            </div>
+                                            <div class="bg-[#0B132B] p-2 rounded-lg border border-slate-800/60">
+                                                <span class="text-[10px] text-slate-400 block">Chris (20%)</span>
+                                                <span class="text-xs font-bold text-emerald-400">${p.splits.chris}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `;
+                    }).join('');
+                }
             }
 
             // Render Trades
@@ -260,10 +315,10 @@
                 tradesContainer.innerHTML = appData.trades.map(t => `
                     <div class="bg-[#111C44] border border-slate-800 rounded-xl p-4 flex justify-between items-center">
                         <div>
-                            <span class="text-[10px] text-cyan-400 font-semibold">${t.strategy}</span>
+                            <span class="text-[10px] text-cyan-400 font-semibold">${t.strategy} | Total Size: ${t.size}</span>
                             <h4 class="text-sm font-bold text-white">${t.ticker}</h4>
                         </div>
-                        <span class="text-xs font-bold text-emerald-400">${t.pnl || 'Active'}</span>
+                        <span class="text-xs font-bold text-emerald-400">${t.date}</span>
                     </div>
                 `).join('');
             } else {
@@ -274,7 +329,7 @@
         function addNewIdea() {
             const ticker = prompt("Enter Ticker Symbol (e.g. PFE, AAL):");
             if (!ticker) return;
-            const score = prompt("Enter Overall Score (e.g. 7.8):", "7.5");
+            const score = prompt("Enter Overall Score:", "7.8");
             appData.ideas.push({ ticker: ticker.toUpperCase(), score: score, date: new Date().toLocaleDateString() });
             saveAppData();
             renderApp();
@@ -283,14 +338,29 @@
         function addNewTrade() {
             const ticker = prompt("Enter Trade Ticker:");
             if (!ticker) return;
-            const strategy = prompt("Enter Strategy (e.g. CSP, PMCC, Covered Call):", "CSP");
-            appData.trades.push({ ticker: ticker.toUpperCase(), strategy: strategy, pnl: "Pending" });
+            const strategy = prompt("Enter Strategy (e.g. CSP, PMCC):", "CSP");
+            const totalSize = parseFloat(prompt("Enter Total Position Size / Quantity:", "10"));
+            if (isNaN(totalSize)) return;
+
+            const splitRecord = {
+                id: Date.now(),
+                ticker: ticker.toUpperCase(),
+                strategy: strategy,
+                size: totalSize,
+                splits: {
+                    mine: totalSize * appData.subaccounts.mine.weight,
+                    liza: totalSize * appData.subaccounts.liza.weight,
+                    chris: totalSize * appData.subaccounts.chris.weight
+                },
+                date: new Date().toLocaleDateString()
+            };
+
+            appData.trades.push(splitRecord);
+            appData.positions.push(splitRecord); // Add to active positions pool
+
             saveAppData();
             renderApp();
-        }
-
-        function addNewPosition() {
-            alert("Position module ready for mapping!");
+            alert(`Trade logged & split across subaccounts!`);
         }
     </script>
 </body>
